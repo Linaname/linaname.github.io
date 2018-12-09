@@ -8,7 +8,7 @@
             border: 1px solid black;
             height: 35px;
             min-width: 35px;
-            font-size: 25px;
+            font-size: 20px;
             text-align: center;
         }
         td.flag {
@@ -94,17 +94,18 @@
     </style>
 </head>
 <body>
-    <form id="info">
+    <div id="info">
         <input type="button" id="btn" value="restart" onclick="restart()">
         <label>Height: <input type="text" id="height" value="10"/></label>
         <label>Width: <input type="text" id="width" value="10"/></label>
         <label>Mines: <input type="text" id="mines" value="13"/></label>
 
         <hr>
-    </form>
+    </div>
     <div id="fieldplace"></div>
     <script>
         restart();
+
         function restart(){
             if (isNatural(height.value) && isNatural(width.value) && isNatural(mines.value)){
                 rowsNumber = +height.value;
@@ -113,6 +114,7 @@
                 newGame(rowsNumber, columnsNumber, minesNumber);
             }
         }
+
         function newGame(rowsNumber, columnsNumber, minesNumber){
             fieldplace.style.width = document.documentElement.clientWidth-16+'px';
             fieldplace.style.height = document.documentElement.clientHeight-info.getBoundingClientRect().bottom-8+'px';
@@ -122,6 +124,7 @@
             setOnCenter(field);
             setMines(field, minesNumber);
         }
+
         function createField(height, width){
             var field = document.createElement('table');
             var tbody = document.createElement('tbody');
@@ -146,6 +149,7 @@
             field.dataset.closedCells = height*width;
             return field;
         }
+
         function setOnCenter(elem){
             var rect = elem.getBoundingClientRect();
             var height = rect.bottom - rect.top;
@@ -153,6 +157,7 @@
             elem.style.top = Math.max(0, (document.documentElement.clientHeight - height)/2) + 'px';
             elem.style.left = Math.max(0, (document.documentElement.clientWidth - width)/2) + 'px';
         }
+
         function setMines(field, minesNumber){
             var m = minesNumber;
             while (m>0){
@@ -169,10 +174,12 @@
             }
             field.dataset.mines = minesNumber;
         }
+
         function kill(elem){
             elem.onclick = null;
             elem.oncontextmenu = null;
         }
+
         function showMines(field){
             for (let row=0; row<field.dataset.rows; row++){
                 for (let column=0; column<field.dataset.columns; column++){
@@ -183,6 +190,7 @@
                 }
             }
         }
+
         function setFlag(event){
             event.preventDefault();
             var target = event.target;
@@ -193,6 +201,7 @@
             if (!target.classList.contains('closed')) return;
             target.classList.toggle('flag');
         }
+
         function openTd(target){
             var field = target.parentNode.parentNode.parentNode;
             target.classList.remove('closed');
@@ -218,6 +227,7 @@
                 }
             }
         }
+
         function clickTd(event){
             var target = event.target;
             while (target.tagName != 'TD'){
@@ -227,6 +237,7 @@
             if (!target.classList.contains('closed') || target.classList.contains('flag')) return;
             openTd(target);
         }
+
         function* tdArea(td){
             var tdColumnIndex = td.cellIndex;
             var tdRowIndex = td.parentNode.rowIndex;
@@ -241,9 +252,11 @@
                 }
             }
         }
+
         function randInt(n){
             return Math.floor(n*Math.random());
         }
+
         function getTd(table, row, column){
             var tbody = table.tBodies[0];
             return tbody.rows[row].cells[column];
